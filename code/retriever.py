@@ -57,7 +57,7 @@ class RetrieverModel:
         return StrOutputParser().parse(model_output)
 
 
-    def create_retriever(self, texts_list, tables_list=[], images_list=[]):
+    def add_documents(self, texts_list, tables_list=[], images_list=[]):
         text_summaries = [self.summarize_document_and_image(i) for i in texts_list]
         table_summaries = [self.summarize_document_and_image(i.metadata.text_as_html) for i in tables_list]
         image_summaries = [self.summarize_document_and_image(i, is_image=True) for i in images_list]
@@ -101,9 +101,10 @@ class RetrieverModel:
                 ) for i, image_data in enumerate(images_list)
             ])))
 
-        retriever = MultiVectorRetriever(
-            vectorstore=self.vectorstore,
-            docstore=self.store,
-            id_key=self.id_key,
-        )
-        return retriever
+    # def get_retriever(self):
+    #     retriever = MultiVectorRetriever(
+    #         vectorstore=self.vectorstore,
+    #         docstore=self.store,
+    #         id_key=self.id_key,
+    #     )
+    #     return retriever
