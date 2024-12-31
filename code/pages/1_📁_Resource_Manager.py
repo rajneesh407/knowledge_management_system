@@ -1,13 +1,10 @@
-# import sys
-# import os
-# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 import streamlit as st
 from pathlib import Path
-from pdf_parser import PDFParser
-from docx_parser import WordDocParser
+from backend.pdf_parser import PDFParser
+from backend.docx_parser import WordDocParser
 from retriever import RetrieverModel
 from model import initialize_client
-from config import PERSISTANT_DIRECTORY, PDF_DIRECTORY, ALLOWED_FILE_TYPES
+from backend.config import PERSISTANT_DIRECTORY, PDF_DIRECTORY, ALLOWED_FILE_TYPES
 import chromadb
 from chromadb.config import Settings
 import os 
