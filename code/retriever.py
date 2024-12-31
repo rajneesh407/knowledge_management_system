@@ -4,7 +4,7 @@ from langchain.storage import InMemoryStore
 from langchain_core.documents import Document
 from langchain_chroma import Chroma
 from model import get_embedding_function, summarization_model_image, summarization_model_text
-from config import EMBEDDING_FUNCTION_NAME, ID_KEY, PERSISTANT_DIRECTORY
+from backend.config import EMBEDDING_FUNCTION_NAME, ID_KEY, PERSISTANT_DIRECTORY
 from langchain.storage._lc_store import create_kv_docstore
 from custom_chroma_docstore import ChromaStore
 import chromadb

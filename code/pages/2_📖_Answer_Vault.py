@@ -1,7 +1,7 @@
 import streamlit as st
 from retriever import RetrieverModel
 from model import response_model, initialize_client
-from config import PERSISTANT_DIRECTORY
+from backend.config import PERSISTANT_DIRECTORY
 import chromadb
 from chromadb.config import Settings
 import os 
