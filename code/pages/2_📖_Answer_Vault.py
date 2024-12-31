@@ -1,10 +1,7 @@
 import streamlit as st
-from pathlib import Path
-from pdf_parser import PDFParser
-from docx_parser import WordDocParser
 from retriever import RetrieverModel
 from model import response_model, initialize_client
-from config import PERSISTANT_DIRECTORY, PDF_DIRECTORY, ALLOWED_FILE_TYPES
+from config import PERSISTANT_DIRECTORY
 import chromadb
 from chromadb.config import Settings
 import os 
@@ -13,7 +10,10 @@ from utils import display_base64_image
 from gtts import gTTS
 from io import BytesIO
 
-st.set_page_config(page_title="Knowledge Retriever")
+st.set_page_config(page_title="Knowledge Retriever", layout='wide', page_icon="📖")
+
+
+
 
 os.environ["PATH"] += os.pathsep + 'C:\\Users\\rajneesh.jha\\Tesseract-OCR'
 pytesseract.pytesseract.tesseract_cmd = 'C:\\Users\\rajneesh.jha\\Tesseract-OCR\\tesseract.exe'
@@ -22,8 +22,6 @@ chroma_db = chromadb.Client(Settings(is_persistent=True,persist_directory=PERSIS
 
 
 st.title("Knowledge Retriever")
-
-st.sidebar.subheader("CHOOSE A PRE-CONFIGURED RESOURCE:")
 collection_name = st.sidebar.selectbox(
     "Choose a Pre-configured Collection",
     options=[""]+[c.name for c in chroma_db.list_collections()],
