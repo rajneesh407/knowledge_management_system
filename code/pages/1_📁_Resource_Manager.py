@@ -13,7 +13,7 @@ import streamlit as st
 import os
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-from database.collection import Collection
+from database.models.collection import Collection
 import pandas as pd 
 
 st.set_page_config(page_title="Resources List", layout='wide', page_icon="📁")
