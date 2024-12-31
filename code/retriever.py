@@ -100,11 +100,3 @@ class RetrieverModel:
                     metadata={self.id_key: img_ids[i]}
                 ) for i, image_data in enumerate(images_list)
             ])))
-
-    # def get_retriever(self):
-    #     retriever = MultiVectorRetriever(
-    #         vectorstore=self.vectorstore,
-    #         docstore=self.store,
-    #         id_key=self.id_key,
-    #     )
-    #     return retriever
