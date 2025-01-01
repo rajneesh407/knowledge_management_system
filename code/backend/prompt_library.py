@@ -24,7 +24,7 @@ Follow these instructions while generating summary:
 Table or Text Chunk: {text_or_table}
 """
 
-description_prompt_image= """You are an assistant tasked with providing a detailed and comprehensive description of the given image. 
+description_prompt_image = """You are an assistant tasked with providing a detailed and comprehensive description of the given image. 
 
 Follow these guidelines while generating description:
 
@@ -35,8 +35,3 @@ Follow these guidelines while generating description:
 
 Respond only with the detailed description, adhering strictly to the provided image content.
 """
-
-
-
-
-
