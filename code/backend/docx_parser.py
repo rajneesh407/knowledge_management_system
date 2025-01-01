@@ -1,11 +1,12 @@
 from unstructured.partition.docx import partition_docx
 
+
 class WordDocParser:
     def __init__(self, path):
         self.path = path
 
     def parse(self):
-        # FIXME : The images are not beng extracted 
+        # FIXME : The images are not beng extracted
         chunks = partition_docx(
             filename=self.path,
             strategy="hi_res",

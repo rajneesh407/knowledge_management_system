@@ -1,5 +1,6 @@
 from unstructured.partition.pdf import partition_pdf
 
+
 class PDFParser:
     def __init__(self, path):
         self.path = path
