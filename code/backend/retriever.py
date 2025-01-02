@@ -17,8 +17,15 @@ from backend.prompt_library import summarization_prompt_text_or_table
 
 
 class RetrieverModel:
+
     def __init__(
-        self, collection_name, client_model, id_key=None, persistant_directory=None
+        self,
+        collection_name,
+        client_model,
+        id_key=None,
+        persistant_directory=None,
+        model_name_text="llama_8b",
+        model_name_image="llama_11b",
     ):
         persistant_directory = persistant_directory or PERSISTANT_DIRECTORY
         self.client_model = client_model
@@ -37,6 +44,8 @@ class RetrieverModel:
         self.store = create_kv_docstore(
             ChromaStore(persistant_directory, collection_name)
         )
+        self.model_name_text = model_name_text
+        self.model_name_image = model_name_image
 
     def collection_exists(self):
         if self.collection_name in [c.name for c in self.chroma_db.list_collections()]:
@@ -54,18 +63,12 @@ class RetrieverModel:
         else:
             raise AssertionError(f"The {self.collection_name} does not exists.")
 
-    def summarize_document_and_image(
-        self,
-        doc,
-        is_image=False,
-        model_name_image="llama_11b",
-        model_name_text="llama_8b",
-    ):
+    def summarize_document_and_image(self, doc, is_image=False):
         from langchain_core.output_parsers import StrOutputParser
 
         if is_image:
             model_output = summarization_model_image(
-                self.client_model, doc, model_name_image
+                self.client_model, doc, self.model_name_image
             )
             return StrOutputParser().parse(model_output)
         model_output = summarization_model_text(
@@ -78,16 +81,26 @@ class RetrieverModel:
                     ),
                 }
             ],
-            model_name_text,
+            self.model_name_text,
         )
         return StrOutputParser().parse(model_output)
 
-    def add_documents(self, texts_list, tables_list=[], images_list=[]):
-        text_summaries = [self.summarize_document_and_image(i) for i in texts_list]
+    def add_documents(
+        self, texts_list, tables_list=[], images_list=[], summarize_content=False
+    ):
+        text_summaries = [
+            (self.summarize_document_and_image(i) if summarize_content else str(i))
+            for i in texts_list
+        ]
         table_summaries = [
-            self.summarize_document_and_image(i.metadata.text_as_html)
+            (
+                self.summarize_document_and_image(i.metadata.text_as_html)
+                if summarize_content
+                else i.metadata.text_as_html
+            )
             for i in tables_list
         ]
+        # Always summarize the images
         image_summaries = [
             self.summarize_document_and_image(i, is_image=True) for i in images_list
         ]

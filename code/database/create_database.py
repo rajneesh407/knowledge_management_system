@@ -1,8 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database.models.collection import Base
+from models.collection import Base
 
-engine = create_engine("sqlite:///knowledge_database.db")
+engine = create_engine("sqlite:///code//database//knowledge_database.db")
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()

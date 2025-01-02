@@ -39,6 +39,7 @@ if collection_name != "":
         persistant_directory=PERSISTANT_DIRECTORY,
     )
     retriever = retriever_class.get_retriever()
+
     st.sidebar.success("Retriever is ready for questions.")
     st.subheader("Ask Question")
     col1, col2 = st.columns([3, 1])
@@ -48,10 +49,10 @@ if collection_name != "":
         response_model_name = st.selectbox(
             "Response Model", options=["llama_11b", "llama_8b"], index=0
         )
+    res_model = response_model(client_model, retriever, response_model_name)
+
     if question and retriever:
-        response = response_model(client_model, retriever, response_model_name).invoke(
-            question
-        )
+        response = res_model.invoke(question)
         if response:
             with st.expander("Answer"):
                 if st.button("▶️"):
@@ -63,7 +64,7 @@ if collection_name != "":
                     st.audio(audio_stream, format="audio/mp3")
                 st.write(response["response"])
 
-            if st.button("Show Summarized Context"):
+            if st.button("Show Context"):
                 st.subheader("Context")
                 context = response["context"]
                 if isinstance(context, dict):
