@@ -105,6 +105,12 @@ with st.expander("Click to add new resource"):
                 f.write(uploaded_file.read())
             parser = WordDocParser(path)
 
+        with st.sidebar:
+            from streamlit_pdf_viewer import pdf_viewer
+
+            st.subheader("Preview Document")
+            pdf_viewer(uploaded_file.getvalue(), height=500)
+
         st.sidebar.success(f"'{uploaded_file.name}' uploaded successfully.")
         st.sidebar.info("Parsing document ... This may take a few moments.")
         texts_list, tables_list, images_list = parser.parse()
