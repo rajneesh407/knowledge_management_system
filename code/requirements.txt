@@ -46,3 +46,7 @@ streamlit-webrtc==0.47.9
 tensorflow==2.15.0
 unstructured==0.16.11
 streamlit_pdf_viewer
+yt_dlp
+speechrecognition 
+transformers 
+ffmpeg-python

@@ -9,6 +9,9 @@ import pytesseract
 from backend.utils import display_base64_image
 from gtts import gTTS
 from io import BytesIO
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
+from database.models.collection import Collection
 
 st.set_page_config(page_title="Knowledge Retriever", layout="wide", page_icon="📖")
 
@@ -29,6 +32,8 @@ collection_name = st.sidebar.selectbox(
     options=[""] + [c.name for c in chroma_db.list_collections()],
     key="collection_name",
 )
+if st.sidebar.button("Add New Resource"):
+    st.switch_page("pages/1_📁_Resource_Manager.py")
 if collection_name != "":
     client_model = initialize_client()
     st.sidebar.markdown("---")
@@ -39,6 +44,26 @@ if collection_name != "":
         persistant_directory=PERSISTANT_DIRECTORY,
     )
     retriever = retriever_class.get_retriever()
+    engine = create_engine(f"sqlite:///database/knowledge_database.db")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    coll = session.query(Collection).filter_by(collection_name=collection_name).all()[0]
+    file_type = coll.file_type
+    file_path = coll.file_path
+    with st.sidebar:
+        if file_type in ["PDF", "DOCX"]:
+            with open(file_path, "rb") as f:
+                file_content = f.read()
+            from streamlit_pdf_viewer import pdf_viewer
+
+            st.subheader("Read Document")
+            pdf_viewer(file_content, height=500)
+        elif file_type == "AUDIO":
+            st.subheader("Listen Audio")
+            st.audio(file_path, format="audio/wav")
+        elif file_type == "YOUTUBE":
+            st.subheader("Watch Video")
+            st.video(file_path)
 
     st.sidebar.success("Retriever is ready for questions.")
     st.subheader("Ask Question")
@@ -72,7 +97,6 @@ if collection_name != "":
                     images = context.get("images", [])
                     for idx in range(len(texts)):
                         with st.expander(f"Text Source {idx + 1}"):
-                            # st.write(texts[idx].page_content)
                             st.write(
                                 retriever.vectorstore.get(
                                     where={"doc_id": texts[idx].metadata["doc_id"]}

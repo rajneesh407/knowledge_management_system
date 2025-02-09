@@ -86,7 +86,12 @@ class RetrieverModel:
         return StrOutputParser().parse(model_output)
 
     def add_documents(
-        self, texts_list, tables_list=[], images_list=[], summarize_content=False
+        self,
+        texts_list,
+        tables_list=[],
+        images_list=[],
+        summarize_content=False,
+        add_metadata=True,
     ):
         text_summaries = [
             (self.summarize_document_and_image(i) if summarize_content else str(i))
@@ -119,10 +124,16 @@ class RetrieverModel:
                         [
                             Document(
                                 page_content=str(text),
-                                metadata={
-                                    self.id_key: doc_ids[i],
-                                    "page_number": text.metadata.page_number,
-                                },
+                                metadata=(
+                                    {
+                                        self.id_key: doc_ids[i],
+                                        "page_number": (
+                                            text.metadata.page_number
+                                            if add_metadata
+                                            else None
+                                        ),
+                                    }
+                                ),
                             )
                             for i, text in enumerate(texts_list)
                         ],
