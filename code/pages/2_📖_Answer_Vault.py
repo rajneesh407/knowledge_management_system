@@ -12,6 +12,7 @@ from io import BytesIO
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from database.models.collection import Collection
+import time
 
 st.set_page_config(page_title="Knowledge Retriever", layout="wide", page_icon="📖")
 
@@ -57,7 +58,7 @@ if collection_name != "":
             from streamlit_pdf_viewer import pdf_viewer
 
             st.subheader("Read Document")
-            pdf_viewer(file_content, height=500)
+            pdf_viewer(file_content, height=600, width=400)
         elif file_type == "AUDIO":
             st.subheader("Listen Audio")
             st.audio(file_path, format="audio/wav")
@@ -77,9 +78,14 @@ if collection_name != "":
     res_model = response_model(client_model, retriever, response_model_name)
 
     if question and retriever:
+        start_time = time.time()
         response = res_model.invoke(question)
+        end_time = time.time()
         if response:
-            with st.expander("Answer"):
+            respone_len = len(response["response"])
+            with st.expander(
+                f"Answer (Generated {respone_len} Characters In: {round(end_time-start_time,2)} seconds)"
+            ):
                 if st.button("▶️"):
                     language = "en"
                     tts = gTTS(text=response["response"], lang=language, slow=False)
