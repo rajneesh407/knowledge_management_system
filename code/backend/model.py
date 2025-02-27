@@ -114,7 +114,7 @@ def response_model(client, retriever, model_name="llama_11b"):
             output = client.chat.completions.create(
                 model="meta-llama/Llama-3.2-11B-Vision-Instruct",
                 messages=prompt_list,
-                max_tokens=800,
+                max_tokens=500,
                 temperature=0.1,
             )
             return output.choices[0].message.content

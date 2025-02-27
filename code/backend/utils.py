@@ -20,16 +20,20 @@ def display_base64_image(base64_code):
 def parse_docs_for_images_and_texts(docs):
     b64 = []
     text = []
+
+    def is_image(val):
+        try:
+            b64decode(val)
+            return True
+        except:
+            return False
+
     for doc in docs:
-        if doc.page_content.strip().isascii():
+        print(doc.page_content.strip().isascii())
+        if not is_image(doc.page_content):
             text.append(doc)
         else:
-            try:
-                b64decode(doc.page_content)
-                b64.append(doc.page_content)
-            except Exception as e:
-                print(e)
-                text.append(doc)
+            b64.append(str(doc.page_content))
     return {"images": b64, "texts": text}
 
 
