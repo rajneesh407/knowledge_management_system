@@ -29,11 +29,13 @@ def parse_docs_for_images_and_texts(docs):
             return False
 
     for doc in docs:
-        print(doc.page_content.strip().isascii())
-        if not is_image(doc.page_content):
-            text.append(doc)
-        else:
-            b64.append(str(doc.page_content))
+        text.append(doc)
+        # Fixme: for images
+        # print(doc.page_content.strip().isascii())
+        # if not is_image(doc.page_content):
+        #     text.append(doc)
+        # else:
+        #     b64.append(str(doc.page_content))
     return {"images": b64, "texts": text}
 
 
