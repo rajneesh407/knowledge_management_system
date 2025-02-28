@@ -105,6 +105,8 @@ class RetrieverModel:
             )
             for i in tables_list
         ]
+
+        images_list = []  # Fixme Images Later
         # Always summarize the images
         image_summaries = [
             self.summarize_document_and_image(i, is_image=True) for i in images_list

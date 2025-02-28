@@ -138,6 +138,7 @@ with st.expander("Click to add new resource"):
         elif file_type == "YOUTUBE":
             path = f"{collection_path}\\video.mp4"
             transcript = get_video_transcript(video_link, collection_path)
+            st.write(transcript)
             texts_list = transcript.split(". ")
             tables_list, images_list = [], []
             st.write(texts_list)

@@ -71,6 +71,7 @@ def get_embedding_function(model_name="all-MiniLM-L6-v2"):
 def build_prompt_for_response_model(kwargs):
     docs_by_type = kwargs["context"]
     user_question = kwargs["question"]
+    print(docs_by_type)
 
     context_text = ""
     if len(docs_by_type["texts"]) > 0:
@@ -114,7 +115,7 @@ def response_model(client, retriever, model_name="llama_11b"):
             output = client.chat.completions.create(
                 model="meta-llama/Llama-3.2-11B-Vision-Instruct",
                 messages=prompt_list,
-                max_tokens=500,
+                max_tokens=300,
                 temperature=0.1,
             )
             return output.choices[0].message.content
